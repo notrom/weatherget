@@ -1,10 +1,10 @@
 {
   "name": "weatherget",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Console application that collects the weather for a given location and displays it.",
   "main": "weatherget.js",
   "scripts": {
-    "test": "mocha test/tests.js"
+    "test": "mocha tests/tests.js"
   },
   "devDependencies": {
     "mocha": "3.2.0"

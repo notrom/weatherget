@@ -29,10 +29,26 @@ function getHttpResponse (host, path, callback) {
 */
 function wrapOpenWeatherMap(opts) {
    this.config = opts;
+   // use the default http function
+   this.httpFunction = getHttpResponse;
 }
 module.exports = wrapOpenWeatherMap;
 
+/**
+ * getConfig
+ * Returns the config
+ */
+wrapOpenWeatherMap.prototype.getConfig = function() {
+    return this.config;
+}
 
+/**
+ * overrideHttpFunction
+ * Allows you to inject a different function
+ */
+wrapOpenWeatherMap.prototype.overrideHttpFunction = function(fnc) {
+    return this.httpFunction = fnc;
+}
 
 /*
 **  getTemperature
@@ -50,7 +66,7 @@ wrapOpenWeatherMap.prototype.getTemperature = function(callback) {
                 console.log (this.config.api.host + 
                              this.config.api.path+"?"+urlParams);
             }
-            getHttpResponse(this.config.api.host,
+            this.httpFunction(this.config.api.host,
                         this.config.api.path+"?"+urlParams,
                         function (resp) {
                             if (resp) {
@@ -84,7 +100,7 @@ wrapOpenWeatherMap.prototype.getTemperature = function(callback) {
  */
 wrapOpenWeatherMap.prototype.locationUrlParam = function () {
     if (this.config.location.lon && this.config.location.lat) {
-        return "&lat="+this.config.location.lat+"&lon="+this.config.location.lon;
+        return "lat="+this.config.location.lat+"&lon="+this.config.location.lon;
     } else if (this.config.location.id) {
         return "id="+this.config.location.id;
     } else if (this.config.location.city) {
