@@ -14,7 +14,7 @@ try {
     ws.getTemperature(function (resp) {
         console.log(resp);
     });
-} catch (e) {
+} catch (err) {
     errorDisplay("Error collecting the temperature.", err);
 }
 
@@ -26,6 +26,9 @@ process.on('uncaughtException', function (err) {
     errorDisplay("Error collecting the temperature.", err);
 }); 
 
+/**
+ * Generic error display function
+ */
 function errorDisplay(message ,err) {
     console.log("Error collecting the temperature.");
     console.log(err);

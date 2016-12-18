@@ -1,13 +1,10 @@
 
 var http = require('http');
 
-var config = {};
-
-// Basic http get request
+/**
+ * Basic http get request and response handler. 
+ */
 function getHttpResponse (host, path, callback) {
-    if (config.log === "debug") {
-        console.log (host+path);
-    }
     return http.get({
             host: host,
             path: path
@@ -24,34 +21,18 @@ function getHttpResponse (host, path, callback) {
         });
 }
 
-/*
-** Figure out which location to use.
-** Order of precedence is: 
-**  1 - lon and lat
-**  2 - id
-**  3 - city
-** If none are provided in th config null is returned.
-*/
-function locationUrlParam() {
-    if (config.location.lon && config.location.lat) {
-        return "&lat="+config.location.lat+"&lon="+config.location.lon;
-    } else if (config.location.id) {
-        return "id="+config.location.id;
-    } else if (config.location.city) {
-        return "q=" + config.location.city;
-    } else {
-        return null;
-    }
-}
+
 
 /*
 ** Object constructor
 ** opts: configuration object. See config.js for required structure.
 */
 function wrapOpenWeatherMap(opts) {
-   config = opts;
+   this.config = opts;
 }
 module.exports = wrapOpenWeatherMap;
+
+
 
 /*
 **  getTemperature
@@ -59,14 +40,18 @@ module.exports = wrapOpenWeatherMap;
 **              representing the current temperature.
 */
 wrapOpenWeatherMap.prototype.getTemperature = function(callback) {
-    var urlParams = "APPID="+config.api.app_key;
-        urlParams += "&" + locationUrlParam();
-        if (config.options.units) {
-            urlParams += "&units=" + config.options.units;
+    var urlParams = "APPID="+this.config.api.app_key;
+        urlParams += "&" + this.locationUrlParam();
+        if (this.config.options.units) {
+            urlParams += "&units=" + this.config.options.units;
         }
         try {
-            getHttpResponse(config.api.host,
-                        config.api.path+"?"+urlParams,
+            if (this.config.log === "debug") {
+                console.log (this.config.api.host + 
+                             this.config.api.path+"?"+urlParams);
+            }
+            getHttpResponse(this.config.api.host,
+                        this.config.api.path+"?"+urlParams,
                         function (resp) {
                             if (resp) {
                                 try {
@@ -87,4 +72,24 @@ wrapOpenWeatherMap.prototype.getTemperature = function(callback) {
             throw error;
         }
         
+}
+
+/**
+ * Figure out which location to use.
+ * Order of precedence is: 
+ *  1 - lon and lat
+ *  2 - id
+ *  3 - city
+ * If none are provided in th config null is returned.
+ */
+wrapOpenWeatherMap.prototype.locationUrlParam = function () {
+    if (this.config.location.lon && this.config.location.lat) {
+        return "&lat="+this.config.location.lat+"&lon="+this.config.location.lon;
+    } else if (this.config.location.id) {
+        return "id="+this.config.location.id;
+    } else if (this.config.location.city) {
+        return "q=" + this.config.location.city;
+    } else {
+        return null;
+    }
 }
