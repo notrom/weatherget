@@ -17,5 +17,9 @@ module.exports = {
     options: {
         units: "metric"
     },
-    log: "debug"
+    /**
+     * debug - some extra information is output
+     * none - no extra info is logged
+     */
+    log: "none"
 };
