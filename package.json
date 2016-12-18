@@ -1,0 +1,11 @@
+{
+  "name": "weatherget",
+  "version": "1.0.0",
+  "description": "Console application that collects the weather for a given location and displays it.",
+  "main": "weatherget.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC"
+}
