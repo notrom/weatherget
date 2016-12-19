@@ -1,6 +1,7 @@
 'use strict';
 
 var assert = require("assert");
+var defaultConfig = require("../config.js");
 var WeatherSource = require("../wrapOpenWeatherMap.js");
 
 describe('wrapOpenWeatherMap', function() {
@@ -33,6 +34,32 @@ describe('wrapOpenWeatherMap', function() {
             var ws = new WeatherSource({location: {foo: "bar"}});
             var location = ws.locationUrlParam();
             assert.equal(location, null);
+        });
+    });
+});
+
+describe('config', function() {
+    describe('require()', function () {
+        it('returns config with app_key populated', function() {
+            assert.notEqual(defaultConfig.api.app_key, null);
+        });
+        it('returns config with host populated', function() {
+            assert.notEqual(defaultConfig.api.host, null);
+        });
+        it('returns config with path populated', function() {
+            assert.notEqual(defaultConfig.api.path, null);
+        });
+        it('returns config with lon populated', function() {
+            assert.notEqual(defaultConfig.location.lon, null);
+        });
+        it('returns config with lat populated', function() {
+            assert.notEqual(defaultConfig.location.lat, null);
+        });
+        it('returns config with units populated', function() {
+            assert.notEqual(defaultConfig.options.units, null);
+        });
+        it('returns config with log populated', function() {
+            assert.notEqual(defaultConfig.log, null);
         });
     });
 });

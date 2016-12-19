@@ -14,6 +14,9 @@ module.exports = {
         lon: 168.35,
         lat: -46.4
     },
+    /**
+     * metric or imperial
+     */
     options: {
         units: "metric"
     },

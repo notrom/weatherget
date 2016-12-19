@@ -56,8 +56,10 @@ wrapOpenWeatherMap.prototype.overrideHttpFunction = function(fnc) {
 **              representing the current temperature.
 */
 wrapOpenWeatherMap.prototype.getTemperature = function(callback) {
+    var self = this;
     var urlParams = "APPID="+this.config.api.app_key;
         urlParams += "&" + this.locationUrlParam();
+        urlParams = encodeURI(urlParams);
         if (this.config.options.units) {
             urlParams += "&units=" + this.config.options.units;
         }
@@ -70,6 +72,9 @@ wrapOpenWeatherMap.prototype.getTemperature = function(callback) {
                         this.config.api.path+"?"+urlParams,
                         function (resp) {
                             if (resp) {
+                                if (self.config.log === "debug") {
+                                    console.log(resp);
+                                }
                                 try {
                                     var parsed = JSON.parse(resp);
                                     if (parsed.main.temp) {
